@@ -1,4 +1,4 @@
-# Tool declarations — v4: every description says WHAT the tool does, WHEN to use it,
+# Tool declarations — v5: v4 descriptions + 4 team-added tools (wikipedia, hackernews, github_repos, hf_models).
 # WHEN NOT to use it, and the argument conventions.
 #
 # If you rename a tool, keep the name in sync across:
@@ -167,3 +167,62 @@ tools:
         max_pages: {type: integer, default: 5, description: "Pages to read, copied from the request ('2 trang đầu' → 2)."}
         max_chars: {type: integer, default: 8000, description: "Max characters returned, 1000–20000."}
       required: [arxiv_url]
+
+  # ---------------- Team-added tools (v4) ----------------
+  - name: wikipedia
+    description: >-
+      Look up background / encyclopedic information on Wikipedia: who a person is, what a concept,
+      company, model architecture or event is. USE WHEN the user asks "X là ai", "X là gì" about a
+      research/tech/AI subject, or explicitly mentions Wikipedia. DO NOT USE for current news (lookup),
+      tweets (timeline / social_search), papers (papers), or out-of-scope requests such as solving math
+      or writing code (answer those directly, no tool).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Name of the person / concept / organisation only, e.g. 'Andrej Karpathy', 'Transformer (machine learning model)'."}
+        lang: {type: string, default: "en", description: "Wikipedia language code: 'vi' when the user asks for Vietnamese Wikipedia / bản tiếng Việt, 'en' for English / bản tiếng Anh. Default 'en'."}
+        limit: {type: integer, default: 3, description: "Number of pages, 1–10."}
+      required: [query]
+
+  - name: hackernews
+    description: >-
+      Search Hacker News stories and discussions (developer community). USE ONLY WHEN the user mentions
+      Hacker News / HN. DO NOT USE for Twitter/X (social_search), general web news (lookup) or GitHub
+      repos (github_repos).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Core topic keyword only, e.g. 'Rust', 'Claude'."}
+        sort: {type: string, enum: [top, latest], default: "top", description: "top = most points / nhiều điểm / nổi bật / hot; latest = newest / mới nhất."}
+        timeframe: {type: string, enum: [day, week, month, year, all], default: "all", description: "hôm nay → day; tuần này → week; tháng này → month; năm nay → year; not mentioned → all."}
+        limit: {type: integer, default: 5, description: "Number of stories, 1–30."}
+      required: [query]
+
+  - name: github_repos
+    description: >-
+      Search public GitHub repositories (open-source projects, libraries, frameworks). USE WHEN the user
+      wants to find repos / projects / thư viện mã nguồn mở on GitHub. DO NOT USE when the user asks you to
+      write or debug code (out of scope, answer directly) or for papers (papers) / models (hf_models).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Topic keywords in English, e.g. 'LLM agent framework', 'vector database'."}
+        language: {type: string, default: "", description: "Programming language filter if the user names one ('viết bằng Rust' → 'Rust'). Empty otherwise."}
+        sort: {type: string, enum: [stars, updated, best_match], default: "stars", description: "stars = nhiều sao / phổ biến nhất (default); updated = mới cập nhật; best_match = most relevant."}
+        created_within: {type: string, enum: [any, week, month, year], default: "any", description: "Only repos created in the last week/month/year ('repo mới trong tháng này' → month). Default any."}
+        limit: {type: integer, default: 5, description: "Number of repos copied from the request ('5 repo' → 5), 1–20."}
+      required: [query]
+
+  - name: hf_models
+    description: >-
+      Search open models on the Hugging Face Hub. USE WHEN the user wants to find models / checkpoints /
+      open weights on Hugging Face, e.g. the most downloaded text-to-image model. DO NOT USE for papers
+      (papers), code repos (github_repos) or news (lookup).
+    parameters:
+      type: object
+      properties:
+        query: {type: string, default: "", description: "Model family / keyword, e.g. 'llama', 'whisper'. May be empty when only a task is given."}
+        task: {type: string, default: "", description: "Hugging Face pipeline tag when the user names a task: text-generation, text-to-image, automatic-speech-recognition, image-classification, translation, feature-extraction ..."}
+        sort: {type: string, enum: [downloads, likes, trending, recent], default: "downloads", description: "downloads = tải nhiều nhất (default); likes = nhiều like; trending = đang hot; recent = mới nhất."}
+        limit: {type: integer, default: 5, description: "Number of models, 1–20."}
+      required: []

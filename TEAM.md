@@ -6,7 +6,7 @@
 - **Lớp:** K5 — L3A.
 - **Repo nhóm:** [K5-L3A-DAY03-LeSongThao-2A202603534-ResearchAgentToolEval](https://github.com/lesongthao/K5-L3A-DAY03-LeSongThao-2A202603534-ResearchAgentToolEval).
 - **Nhánh nộp:** `main`.
-- **Commit chốt bài nộp:** `<HASH>` (commit cuối trên `main` trước deadline).
+- **Commit chốt bài nộp:** `b465e18` (commit cuối trên `main` trước deadline).
 - **Provider/model:** v0–v1 dùng OpenRouter / `openai/gpt-4o-mini`; v2–v5, group, extension dùng OpenAI trực tiếp / `gpt-4o-mini`. Chi tiết trong [version log](starter_v0/artifacts/version_log.csv).
 
 ## Thành viên và phân công

@@ -25,7 +25,7 @@ v4–v5 mới đụng `tools.yaml`. File đã chuẩn bị sẵn nằm ở nhán
 
 ## 2. Chia người
 
-| Số người | A (Khôi Nguyên) | B | C | D | E |
+| Số người | A (Khôi Nguyên) | B (Sông Thao) | C (Xuân Thành) | D (Đăng Khoa) | E (Quang Bảo) |
 |---|---|---|---|---|---|
 | 3 | P0, P3, P6b, P7b | P1, P4, P5 | P2, P6a, P7a | | |
 | 4 | P0, P6b, P7b | P1, P5 | P2, P4, P6a | P3, P7a | |

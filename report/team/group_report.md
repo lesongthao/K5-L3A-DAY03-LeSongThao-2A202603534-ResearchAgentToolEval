@@ -5,7 +5,7 @@
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm: _(điền)_
+- Tên nhóm: _Lesongthao_
 - Thành viên và phân công: xem [TEAM.md](../../TEAM.md)
 - Provider/model dùng cho v0–v5: cùng model **`gpt-4o-mini`**, temperature 0. v0–v1 chạy qua **OpenRouter** (`openai/gpt-4o-mini`); v2–v5, group và extension chạy qua **OpenAI API trực tiếp** (`gpt-4o-mini`). Chi tiết trong [version_log.csv](../../starter_v0/artifacts/version_log.csv).
 

@@ -43,13 +43,13 @@ Bonus:
 Đánh dấu khi xong. Mỗi dòng trỏ tới file cần sửa và bằng chứng cần nộp.
 
 **Setup**
-- [ ] `.env` có provider key + `TAVILY_API_KEY`, `FIRECRAWL_API_KEY`, `RAPIDAPI_KEY`
-- [ ] `python scripts/preflight_provider.py --provider openrouter` pass
-- [ ] `pytest` chạy được: contract test + example test xanh, TODO test đang `skipped`
+- [v ] `.env` có provider key + `TAVILY_API_KEY`, `FIRECRAWL_API_KEY`, `RAPIDAPI_KEY`
+- [ v] `python scripts/preflight_provider.py --provider openrouter` pass
+- [v ] `pytest` chạy được: contract test + example test xanh, TODO test đang `skipped`
 
 **Prompt & tool declaration**
-- [ ] Chạy baseline `v0`, ghi vào `artifacts/version_log.csv`
-- [ ] Liệt kê các case FAIL của `v0` và gán mỗi case một loại lỗi (`wrong_tool`, `wrong_arg_value`, `missing_info`...)
+- [x] Chạy baseline `v0`, ghi vào `artifacts/version_log.csv`
+- [x] Liệt kê các case FAIL của `v0` và gán mỗi case một loại lỗi (`wrong_tool`, `wrong_arg_value`, `missing_info`...)
 - [ ] `artifacts/system_prompt.md`: bỏ các chỉ dẫn xấu cố ý của starter (đoán thay vì hỏi, gửi không cần xác nhận, ép một bước)
 - [ ] `artifacts/system_prompt.md`: thêm rule routing (khi nào `timeline` / `social_search` / `lookup` / `fetch` / `clarify`)
 - [ ] `artifacts/tools.yaml`: viết lại `description` mỗi tool: làm gì, **khi nào dùng / khi nào không dùng**
@@ -69,9 +69,11 @@ Bonus:
 - [ ] `pytest`: 0 failed, 0 skipped
 
 **Demo & report**
-- [ ] UI chạy được + link dùng thử
-- [ ] `chat.py`: ≥ 3 lượt live, có transcript
-- [ ] `artifacts/REPORT.md` Phần A trước 16:30, Phần B trước khi nộp
+- [x] UI chạy được ở local: `http://localhost:8501`
+- [ ] Public link dùng thử cho team khác (hiện chưa deploy; link local chỉ dùng trong môi trường này)
+- [x] `chat.py`: ≥ 3 lượt live, có transcript
+- [x] `artifacts/REPORT.md` Phần A trước 16:30
+- [ ] `artifacts/REPORT.md` Phần B trước khi nộp (v1–v3 và team eval còn thiếu)
 
 **Bonus (tuỳ chọn)**
 - [ ] `send` có xác nhận trước khi gửi, có transcript chứng minh

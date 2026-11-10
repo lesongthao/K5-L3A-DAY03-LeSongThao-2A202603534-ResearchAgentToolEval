@@ -2,7 +2,7 @@
 
 ## Thông tin nhóm
 
-- **Tên nhóm:** Chưa chốt tên nhóm.
+- **Tên nhóm:** Lesongthao.
 - **Lớp:** K5 — L3A.
 - **Repo nhóm:** [K5-L3A-DAY03-LeSongThao-2A202603534-ResearchAgentToolEval](https://github.com/lesongthao/K5-L3A-DAY03-LeSongThao-2A202603534-ResearchAgentToolEval).
 - **Nhánh nộp:** `main`.
@@ -19,7 +19,6 @@
 | 4 | Trần Đăng Khoa | 2A202603364 | [khoatran134563-2k3](https://github.com/khoatran134563-2k3) | P3, P4, P6b |
 | 5 | Dương Quang Bảo | 2A202603362 | [wadiobao](https://github.com/wadiobao) | P7a, P8 (bonus) |
 
-Thông tin chưa xác nhận cần được thành viên bổ sung trước khi chốt bài nộp. Mỗi thành viên tự nộp cùng link repo nhóm trên LMS theo [SUBMISSION.md](SUBMISSION.md).
 
 ## Đóng góp và bằng chứng
 

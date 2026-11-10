@@ -15,7 +15,7 @@
 |---:|---|---|---|---|
 | 1 | Nguyễn Khôi Nguyên | 2A202603453 | [nguyenkhoinguyen07122005-cpu](https://github.com/nguyenkhoinguyen07122005-cpu) | P0, P7b |
 | 2 | Lê Sông Thao | 2A202603534 | [lesongthao](https://github.com/lesongthao) | P1, P5 |
-| 3 | Thành — cần xác nhận họ tên đầy đủ | Chưa xác nhận | [KDAGRAGAS](https://github.com/KDAGRAGAS) | P2, P6a |
+| 3 | Bùi Xuân Thành | 2A202603521 | [KDAGRAGAS](https://github.com/KDAGRAGAS) | P2, P6a |
 | 4 | Trần Đăng Khoa | 2A202603364 | [khoatran134563-2k3](https://github.com/khoatran134563-2k3) | P3, P4, P6b |
 | 5 | Quang Bảo — cần xác nhận họ tên đầy đủ | Chưa xác nhận | [wadiobao](https://github.com/wadiobao) | P7a, P8 (bonus) |
 

@@ -1,0 +1,1236 @@
+{
+  "run_id": "v4_B_group_openrouter_20261110T104623453564",
+  "version": "v4",
+  "artifact_version": "v4+p6269937d3c3d+t6485836a4d0e",
+  "prompt_hash": "6269937d3c3da90bc4d58ca8a96e01d47c54bcdd0363b8378dfbfe0319954fe2",
+  "tools_hash": "6485836a4d0e4603ea477cddffe1d709e523d30726fc2ca1b99abbfe50d62388",
+  "phase": "B",
+  "suite": "group",
+  "provider": "openrouter",
+  "model": "openai/gpt-4o-mini",
+  "system_prompt": "artifacts\\versions\\v4\\system_prompt.md",
+  "tools": "artifacts\\versions\\v4\\tools.yaml",
+  "eval_cases": "data\\eval_group.json",
+  "dataset_id": "day04_v2_research_group",
+  "dataset_role": "group",
+  "description": "Case do NHÓM tự viết thêm: 5 single-turn + 5 multi-turn. Cover routing tới 4 tool mới (wikipedia, hackernews, github_repos, hf_models), args mới (lang, sort, task, language), boundary send (xác nhận → gửi; từ chối → không gửi) và đổi tool giữa các lượt.",
+  "generated_at": "2026-11-10T10:46:23",
+  "summary": {
+    "total_cases": 10,
+    "measured_cases": 10,
+    "provider_error_cases": 0,
+    "passed_cases": 9,
+    "case_accuracy": 0.9,
+    "tool_routing_accuracy": 0.9,
+    "argument_accuracy": 0.9,
+    "multiturn_accuracy": 0.8,
+    "failure_counts": {
+      "wrong_boundary": 1
+    },
+    "observed_mismatch_counts": {
+      "extra_tool_call": 1
+    }
+  },
+  "results": [
+    {
+      "id": "G01_wikipedia_vi_concept",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_wikipedia",
+        "difficulty": "medium",
+        "what_it_tests": "Hỏi khái niệm + nói rõ Wikipedia tiếng Việt → tool mới wikipedia với lang=vi, không dùng lookup."
+      },
+      "input": "Tra Wikipedia tiếng Việt giúp mình: học tăng cường (reinforcement learning) là gì?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "lang": "vi"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "query": "học tăng cường",
+              "lang": "vi"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "query": "học tăng cường",
+            "lang": "vi"
+          },
+          "result": {
+            "tool": "wiki_search",
+            "query": "học tăng cường",
+            "lang": "vi",
+            "items": [
+              {
+                "title": "Học tăng cường",
+                "url": "https://vi.wikipedia.org/wiki/H%E1%BB%8Dc_t%C4%83ng_c%C6%B0%E1%BB%9Dng",
+                "source": "vi.wikipedia.org",
+                "description": "",
+                "summary": "Trong ngành khoa học máy tính, học tăng cường là một lĩnh vực con của học máy, nghiên cứu cách thức một agent trong một môi trường nên chọn thực hiện các hành động nào để cực đại hóa một khoản thưởng (reward) nào đó về lâu dài. Các thuật toán học tăng cường cố gắng tìm một chiến lược ánh xạ các trạng thái của thế giới tới các hành động mà agent nên chọn trong các trạng thái đó."
+              },
+              {
+                "title": "Q-learning (học tăng cường)",
+                "url": "https://vi.wikipedia.org/wiki/Q-learning_%28h%E1%BB%8Dc_t%C4%83ng_c%C6%B0%E1%BB%9Dng%29",
+                "source": "vi.wikipedia.org",
+                "description": "",
+                "summary": "Q -learning là một thuật toán học tăng cường không mô hình. Mục tiêu của Q-learning là học một chính sách, chính sách cho biết máy sẽ thực hiện hành động"
+              },
+              {
+                "title": "Không mô hình (học tăng cường)",
+                "url": "https://vi.wikipedia.org/wiki/Kh%C3%B4ng_m%C3%B4_h%C3%ACnh_%28h%E1%BB%8Dc_t%C4%83ng_c%C6%B0%E1%BB%9Dng%29",
+                "source": "vi.wikipedia.org",
+                "description": "",
+                "summary": "Trong học tăng cường (RL), một thuật toán không mô hình (trái ngược với một thuật toán dựa trên mô hình) là một thuật toán mà không sử dụng các phân bố"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G02_hackernews_top_week",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_hackernews_args",
+        "difficulty": "medium",
+        "what_it_tests": "Nhắc Hacker News → hackernews (không phải social_search); 'tuần này' → timeframe=week, 'nhiều điểm nhất' → sort=top, query chỉ là keyword."
+      },
+      "input": "Tuần này trên Hacker News dân dev bàn gì về Rust? Lấy các bài nhiều điểm nhất.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust",
+              "sort": "top",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Rust",
+              "sort": "top",
+              "timeframe": "week"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Rust",
+            "sort": "top",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Rust",
+            "sort": "top",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "KetchUp – Open-source SketchUp alternative built with Rust and WebGPU",
+                "url": "https://ketchup3d.github.io/app/",
+                "discussion_url": "https://news.ycombinator.com/item?id=50418176",
+                "source": "ketchup3d.github.io",
+                "summary": "KetchUp – Open-source SketchUp alternative built with Rust and WebGPU",
+                "date": "2026-11-08T22:35:35Z",
+                "metrics": {
+                  "points": 732,
+                  "comments": 225
+                },
+                "author": "dcoulmbe"
+              },
+              {
+                "title": "The Ubuntu 26.04 Rust sudo is not compatible with standard sudo",
+                "url": "https://utcc.utoronto.ca/~cks/space/blog/linux/Ubuntu2604RustSudoNotCompatible",
+                "discussion_url": "https://news.ycombinator.com/item?id=50354308",
+                "source": "utcc.utoronto.ca",
+                "summary": "The Ubuntu 26.04 Rust sudo is not compatible with standard sudo",
+                "date": "2026-11-03T16:43:54Z",
+                "metrics": {
+                  "points": 209,
+                  "comments": 201
+                },
+                "author": "wondersky"
+              },
+              {
+                "title": "Rune: A native GPU-rendered Rust UI framework for macOS, Windows, Linux and web",
+                "url": "https://github.com/anomalyco/rune",
+                "discussion_url": "https://news.ycombinator.com/item?id=50394569",
+                "source": "github.com",
+                "summary": "Rune: A native GPU-rendered Rust UI framework for macOS, Windows, Linux and web",
+                "date": "2026-11-06T16:31:32Z",
+                "metrics": {
+                  "points": 179,
+                  "comments": 131
+                },
+                "author": "mik3y"
+              },
+              {
+                "title": "Clj.rs – a Clojure dialect implemented in Rust",
+                "url": "https://clj.rs/",
+                "discussion_url": "https://news.ycombinator.com/item?id=50366902",
+                "source": "clj.rs",
+                "summary": "Clj.rs – a Clojure dialect implemented in Rust",
+                "date": "2026-11-04T15:23:16Z",
+                "metrics": {
+                  "points": 173,
+                  "comments": 69
+                },
+                "author": "simonpure"
+              },
+              {
+                "title": "Show HN: Firenook – Firebase emulators in Rust: 40× faster writes, 10× less RAM",
+                "url": "https://firenook.dev/",
+                "discussion_url": "https://news.ycombinator.com/item?id=50378643",
+                "source": "firenook.dev",
+                "summary": "Hi HN, we have been developing with Firebase for a long time, and the only way Firebase developers can build apps without directly costing them is using the official Firebase Emulator Suite.<p>However, the issue with this suite is, it&#x27;s dependent and running on Java with a old Console UI (not updated in years), that was not built to support tons and millions of data and has pretty bad developer experience. For a long time, we were hitting Out of Memory on even high specs laptop while develo",
+                "date": "2026-11-05T13:07:29Z",
+                "metrics": {
+                  "points": 173,
+                  "comments": 30
+                },
+                "author": "sanjevirau"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G03_github_top_stars",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_github",
+        "difficulty": "easy",
+        "what_it_tests": "Tìm repo mã nguồn mở → github_repos, '5 repo' → limit=5, 'nhiều sao nhất' → sort=stars."
+      },
+      "input": "Tìm 5 repo GitHub nhiều sao nhất về LLM agent framework.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_repos",
+            "args": {
+              "sort": "stars",
+              "limit": 5
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_repos",
+            "args": {
+              "query": "LLM agent framework",
+              "sort": "stars",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_repos",
+          "args": {
+            "query": "LLM agent framework",
+            "sort": "stars",
+            "limit": 5
+          },
+          "result": {
+            "tool": "github_search",
+            "query": "LLM agent framework",
+            "api_query": "LLM agent framework",
+            "sort": "stars",
+            "total_count": 7462,
+            "items": [
+              {
+                "title": "langchain-ai/langchain",
+                "url": "https://github.com/langchain-ai/langchain",
+                "source": "github.com",
+                "summary": "The agent engineering platform.",
+                "language": "Python",
+                "date": "2026-11-10T03:45:57Z",
+                "metrics": {
+                  "stars": 149285,
+                  "forks": 25098
+                }
+              },
+              {
+                "title": "TauricResearch/TradingAgents",
+                "url": "https://github.com/TauricResearch/TradingAgents",
+                "source": "github.com",
+                "summary": "TradingAgents: Multi-Agents LLM Financial Trading Framework",
+                "language": "Python",
+                "date": "2026-11-04T10:13:58Z",
+                "metrics": {
+                  "stars": 121667,
+                  "forks": 23286
+                }
+              },
+              {
+                "title": "FoundationAgents/MetaGPT",
+                "url": "https://github.com/FoundationAgents/MetaGPT",
+                "source": "github.com",
+                "summary": "🌟 The Multi-Agent Framework: First AI Software Company, Towards Natural Language Programming",
+                "language": "Python",
+                "date": "2026-01-21T10:12:33Z",
+                "metrics": {
+                  "stars": 71233,
+                  "forks": 9108
+                }
+              },
+              {
+                "title": "AstrBotDevs/AstrBot",
+                "url": "https://github.com/AstrBotDevs/AstrBot",
+                "source": "github.com",
+                "summary": "AI Agent Assistant & development framework that integrates lots of IM platforms, LLMs, plugins and AI feature, and can be your openclaw alternative. ✨",
+                "language": "Python",
+                "date": "2026-11-10T02:34:14Z",
+                "metrics": {
+                  "stars": 46548,
+                  "forks": 3453
+                }
+              },
+              {
+                "title": "langchain-ai/langgraph",
+                "url": "https://github.com/langchain-ai/langgraph",
+                "source": "github.com",
+                "summary": "Build resilient agents.",
+                "language": "Python",
+                "date": "2026-11-09T19:03:28Z",
+                "metrics": {
+                  "stars": 44720,
+                  "forks": 7705
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G04_hf_models_task",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "route_new_tool_hf_models",
+        "difficulty": "medium",
+        "what_it_tests": "Model trên Hugging Face → hf_models (không phải papers/lookup), map task thành pipeline tag text-to-image, 'tải nhiều nhất' → sort=downloads."
+      },
+      "input": "Model text-to-image nào đang được tải nhiều nhất trên Hugging Face?",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hf_models",
+            "args": {
+              "task": "text-to-image",
+              "sort": "downloads"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hf_models",
+            "args": {
+              "task": "text-to-image",
+              "sort": "downloads"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hf_models",
+          "args": {
+            "task": "text-to-image",
+            "sort": "downloads"
+          },
+          "result": {
+            "tool": "hf_model_search",
+            "query": "",
+            "task": "text-to-image",
+            "sort": "downloads",
+            "items": [
+              {
+                "title": "Comfy-Org/Qwen-Image-2.1",
+                "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1",
+                "source": "huggingface.co",
+                "summary": "task=text-to-image; downloads=10238176; likes=1302",
+                "task": "text-to-image",
+                "date": "2026-09-15T19:41:09.000Z",
+                "metrics": {
+                  "downloads": 10238176,
+                  "likes": 1302
+                }
+              },
+              {
+                "title": "stabilityai/stable-diffusion-xl-base-1.0",
+                "url": "https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0",
+                "source": "huggingface.co",
+                "summary": "task=text-to-image; downloads=4649928; likes=8458",
+                "task": "text-to-image",
+                "date": "2023-07-25T13:25:51.000Z",
+                "metrics": {
+                  "downloads": 4649928,
+                  "likes": 8458
+                }
+              },
+              {
+                "title": "Comfy-Org/Krea-2",
+                "url": "https://huggingface.co/Comfy-Org/Krea-2",
+                "source": "huggingface.co",
+                "summary": "task=text-to-image; downloads=4464828; likes=805",
+                "task": "text-to-image",
+                "date": "2026-06-16T22:31:20.000Z",
+                "metrics": {
+                  "downloads": 4464828,
+                  "likes": 805
+                }
+              },
+              {
+                "title": "unsloth/Qwen-Image-2.1-GGUF",
+                "url": "https://huggingface.co/unsloth/Qwen-Image-2.1-GGUF",
+                "source": "huggingface.co",
+                "summary": "task=text-to-image; downloads=1629120; likes=463",
+                "task": "text-to-image",
+                "date": "2026-09-21T13:04:48.000Z",
+                "metrics": {
+                  "downloads": 1629120,
+                  "likes": 463
+                }
+              },
+              {
+                "title": "unsloth/Qwen-Image-2.1-Turbo-GGUF",
+                "url": "https://huggingface.co/unsloth/Qwen-Image-2.1-Turbo-GGUF",
+                "source": "huggingface.co",
+                "summary": "task=text-to-image; downloads=1353233; likes=83",
+                "task": "text-to-image",
+                "date": "2026-10-10T05:33:27.000Z",
+                "metrics": {
+                  "downloads": 1353233,
+                  "likes": 83
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G05_arxiv_newest_sort",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": false,
+      "metadata": {
+        "skill": "arg_papers_sort_newest",
+        "difficulty": "medium",
+        "what_it_tests": "'mới nhất' với paper → sort_by=submittedDate thay vì relevance mặc định."
+      },
+      "input": "Tìm các paper arXiv mới nhất về speculative decoding.",
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "sort_by": "submittedDate"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "papers",
+            "args": {
+              "query": "speculative decoding",
+              "max_results": 5,
+              "sort_by": "submittedDate"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "papers",
+          "args": {
+            "query": "speculative decoding",
+            "max_results": 5,
+            "sort_by": "submittedDate"
+          },
+          "result": {
+            "tool": "arxiv_search",
+            "query": "speculative decoding",
+            "api_query": "all:speculative AND all:decoding",
+            "total_results": 975,
+            "items": [
+              {
+                "arxiv_id": "2611.10634v1",
+                "title": "Coverage-Verified Sparse Attention: Closed-Loop Quality Control for Long-Context LLM Decoding",
+                "summary": "Sparse attention accelerates long-context decoding by reading a subset of the KV cache, but existing methods are open-loop: the kernel commits to its selection with no signal indicating whether enough attention mass was preserved and no recovery path when it was not. The needed signal already exists inside the kernel. The fraction of softmax mass on the selected tokens, which we call coverage, satisfies an exact algebraic equality with per-step output error and serves a dual role as the acceptance criterion and the interpolation weight for recovery. Coverage-Verified Sparse Attention (CVSA) turns coverage into a training-free, closed-loop verify-then-correct decode loop that accepts high-coverage drafts and recovers only the heads that fall short, with no sampling, no draft model, and no speculative-decoding infrastructure. Quality varies by only $0.14$ points across the threshold sweep; budget and scheduling ablations characterize the deployed operating point. On LongBench at 7B and 70B, CVSA comes within $1.13$ points of dense attention, statistically matching it at 70B, and it loses $0.8$ points on RULER; measured median decode-step speedup reaches $6.21\\times$ at 128K context.",
+                "authors": [
+                  "Yan-Cheng Li",
+                  "Chun-Yi Lee"
+                ],
+                "published": "2026-11-07T10:22:27Z",
+                "updated": "2026-11-07T10:22:27Z",
+                "url": "http://arxiv.org/abs/2611.10634v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.10634v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.LG",
+                "categories": [
+                  "cs.LG",
+                  "cs.CL"
+                ]
+              },
+              {
+                "arxiv_id": "2611.10469v1",
+                "title": "Hibana: Fast Agentic Inference on Unified-Memory Devices",
+                "summary": "Local AI promises capable personal assistants that run on users' own devices, keeping data and computation under their control. Open-weight models that fit on local devices can now handle practical tasks such as coding. Yet current inference engines fall short. Popular engines such as vLLM and SGLang target datacenter GPUs with dedicated host memory, while local engines underuse the memory hierarchy of unified-memory devices. We present Hibana, an inference engine for unified-memory devices that co-optimizes model representation, memory management, and decoding strategy. Model surgery, the process of editing a trained model's architecture to suit its hardware, changes how the model computes, shrinking its memory footprint and data movement. Unified-memory management preserves each agent's state across turns, so long-running agents can resume instantly instead of recomputing their state. Adaptive speculation generates several tokens per step. Hibana codesigns these features around the shared memory capacity and limited bandwidth of unified-memory systems-on-chip to support local multi-agent workloads. On a single DGX Spark serving Qwen and Nemotron models of up to 125B parameters, Hibana completes up to 3.4$\\times$ more agentic tasks per hour and delivers up to 3.9$\\times$ higher decoding throughput than other established frameworks such as vLLM, NVIDIA Flare, llama.cpp, and TensorFold. Code is available at https://github.com/sharar-project/hibana.",
+                "authors": [
+                  "Yahya Emara",
+                  "Chi-Chih Chang",
+                  "Anthony Fei",
+                  "Ahmed F. AbouElhamayed",
+                  "Chong-Yan Chen",
+                  "Hung-Yueh Chiang",
+                  "Kai-Chiang Wu",
+                  "Mohamed S. Abdelfattah"
+                ],
+                "published": "2026-11-07T04:38:35Z",
+                "updated": "2026-11-07T04:38:35Z",
+                "url": "http://arxiv.org/abs/2611.10469v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.10469v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CL",
+                "categories": [
+                  "cs.CL",
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2611.10432v1",
+                "title": "D-REAL: Acceptance-Length Optimization with Unbiased Gradients for Speculative Decoding",
+                "summary": "Speculative decoding efficiency depends on the number of consecutively accepted draft tokens, yet token-level training objectives do not directly optimize this quantity. We introduce D-REAL (Drafter Reinforcement of Expected Acceptance Length), a post-training method that directly optimizes expected acceptance length for a fixed decoding context. D-REAL weights position-wise draft-target distributional overlap by prefix survival probabilities along a draft-sampled prefix, faithfully capturing the sequential dependence of verification on earlier proposals. By accounting for the parameter dependence of the proposal distribution, we derive an unbiased gradient estimator for this single-round objective under stochastic verification. We evaluate D-REAL on DSpark and DFlash2 with Qwen3-8B as the target model across ten benchmarks. Starting from baselines whose mean acceptance length has plateaued, one epoch of D-REAL post-training consistently improves the benchmark-averaged mean acceptance length by up to 0.23 tokens across both architectures under greedy (T = 0.0) and stochastic (T = 1.0) sampling, translating into up to a 9.4% end-to-end serving throughput improvement.",
+                "authors": [
+                  "Meng Wei",
+                  "Yefei Chen",
+                  "Antong Li",
+                  "Yanan Gao",
+                  "Xingliang Shi",
+                  "Xin Gao",
+                  "Zhiling Ye",
+                  "Yun Yue",
+                  "Chunxiao Guo",
+                  "Peng Wei"
+                ],
+                "published": "2026-11-07T03:19:43Z",
+                "updated": "2026-11-07T03:19:43Z",
+                "url": "http://arxiv.org/abs/2611.10432v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.10432v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.AI",
+                "categories": [
+                  "cs.AI"
+                ]
+              },
+              {
+                "arxiv_id": "2611.08669v1",
+                "title": "ChainFlow: Few-Step Latent Flow Matching for Speculative Decoding",
+                "summary": "Speculative decoding has become a standard way to accelerate LLM inference: a lightweight drafter proposes tokens that the target verifies in one parallel pass. Existing drafters face trade-offs that limits their speedups: autoregressive drafters generate tokens one at a time, so drafting cost grows with draft length, while diffusion drafters generate tokens in parallel but predict each position independently, ignoring inter-token dependencies. We introduce ChainFlow, a new speculative decoding paradigm and the first flow-matching drafter conditioned on the target's hidden states. ChainFlow treats drafting as a short transport over hidden states, needing one or two flow steps instead of the many denoising steps of generation from noise. A variational autoencoder compresses these states so drafting cost barely grows with target size, lightweight feedback heads restore inter-token dependencies, and tree drafting raises acceptance. On Qwen3.5 models, at matched drafter size and training data, ChainFlow outperforms EAGLE-3 and DFlash in vLLM by 39% and 11%, respectively. These gains further widen as drafters are adapted to new languages sequentially. Our ablations cover drafter design and concurrent serving, and we open-source our code and drafter models.",
+                "authors": [
+                  "Selim Aktas",
+                  "Yusuf Erdem Erdem",
+                  "Ahmed Zeer",
+                  "Himmet Toprak Kesgin",
+                  "Muzaffer Kaan Yuce",
+                  "Mehmet Fatih Amasyali"
+                ],
+                "published": "2026-11-05T20:26:25Z",
+                "updated": "2026-11-05T20:26:25Z",
+                "url": "http://arxiv.org/abs/2611.08669v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.08669v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.AI",
+                "categories": [
+                  "cs.AI",
+                  "cs.CL"
+                ]
+              },
+              {
+                "arxiv_id": "2611.08362v1",
+                "title": "SpecCTMC: Exact Speculative Simulation of Diffusion Language Model Continuous-Time Markov Chains",
+                "summary": "Masked diffusion language models offer parallel text generation, but independently sampling multiple tokens can disrupt their dependencies and change the output distribution. Exact continuous-time sampling avoids this approximation, yet typically requires one sequential model evaluation per token. We introduce SpecCTMC, a training-free speculative sampler that reduces this sequential bottleneck without a separate draft model. SpecCTMC proposes successive token updates using previously computed model predictions, evaluates their intermediate states in parallel, and applies an exact acceptance-and-correction procedure. We prove that SpecCTMC preserves the joint distribution of event times, generation order, and token values of the underlying continuous-time Markov chain. It therefore introduces neither time-discretization error nor additional factorization error from parallel decoding. Experiments on LLaDA-8B-Instruct and Dream-v0-Instruct-7B across five benchmarks demonstrate 1.73-4.38x fewer sequential model evaluations than direct continuous-time sampling, while preserving the reference sampling distribution. Our code is available at: https://github.com/kasakh/specctmc",
+                "authors": [
+                  "Siva Rajesh Kasa",
+                  "Yasong Dai",
+                  "Sumit Negi",
+                  "Hongdong Li"
+                ],
+                "published": "2026-11-05T17:41:20Z",
+                "updated": "2026-11-05T17:41:20Z",
+                "url": "http://arxiv.org/abs/2611.08362v1",
+                "pdf_url": "https://arxiv.org/pdf/2611.08362v1",
+                "source": "arxiv.org",
+                "primary_category": "cs.CL",
+                "categories": [
+                  "cs.CL"
+                ]
+              }
+            ],
+            "rate_limit_note": "arXiv may return 429 if called too frequently; this tool waits at least 3 seconds between requests in-process."
+          }
+        }
+      ]
+    },
+    {
+      "id": "G06_multiturn_github_fill_language",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_carry_new_tool_args",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: carry chủ đề vector database, thêm filter language=Rust từ lượt 2, sort=stars từ lượt 3."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tìm vài repo GitHub về vector database giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "Chỉ lấy repo viết bằng Rust thôi"
+        },
+        {
+          "role": "user",
+          "content": "Sắp xếp theo số sao nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "github_repos",
+            "args": {
+              "language": "Rust",
+              "sort": "stars"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "github_repos",
+            "args": {
+              "query": "vector database",
+              "language": "Rust",
+              "sort": "stars"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "github_repos",
+          "args": {
+            "query": "vector database",
+            "language": "Rust",
+            "sort": "stars"
+          },
+          "result": {
+            "tool": "github_search",
+            "query": "vector database",
+            "api_query": "vector database language:Rust",
+            "sort": "stars",
+            "total_count": 457,
+            "items": [
+              {
+                "title": "qdrant/qdrant",
+                "url": "https://github.com/qdrant/qdrant",
+                "source": "github.com",
+                "summary": "Qdrant - High-performance, massive-scale Vector Database and Vector Search Engine for the next generation of AI. Also available in the cloud https://cloud.qdrant.io/",
+                "language": "Rust",
+                "date": "2026-11-10T01:26:13Z",
+                "metrics": {
+                  "stars": 35489,
+                  "forks": 2804
+                }
+              },
+              {
+                "title": "xerj-org/xerj",
+                "url": "https://github.com/xerj-org/xerj",
+                "source": "github.com",
+                "summary": "AI search engine and MCP server for bots and agents. One Rust binary indexes code, docs, logs, JSONL/CSV and PDFs for BM25 full-text, vector and hybrid search, code search without grep, agent memory and RAG. Elasticsearch-compatible API; Corpus Hub serves hundreds of reference memory corpora.",
+                "language": "Rust",
+                "date": "2026-11-10T02:25:47Z",
+                "metrics": {
+                  "stars": 18687,
+                  "forks": 1373
+                }
+              },
+              {
+                "title": "HelixDB/helix-db",
+                "url": "https://github.com/HelixDB/helix-db",
+                "source": "github.com",
+                "summary": "HelixDB is an OLTP graph database with native vector and full-text search built in Rust on Object Storage.",
+                "language": "Rust",
+                "date": "2026-11-09T17:36:19Z",
+                "metrics": {
+                  "stars": 6279,
+                  "forks": 395
+                }
+              },
+              {
+                "title": "cozodb/cozo",
+                "url": "https://github.com/cozodb/cozo",
+                "source": "github.com",
+                "summary": "A transactional, relational-graph-vector database that uses Datalog for query. The hippocampus for AI!",
+                "language": "Rust",
+                "date": "2024-12-04T12:49:06Z",
+                "metrics": {
+                  "stars": 4145,
+                  "forks": 169
+                }
+              },
+              {
+                "title": "tensorchord/pgvecto.rs",
+                "url": "https://github.com/tensorchord/pgvecto.rs",
+                "source": "github.com",
+                "summary": "Scalable, Low-latency and Hybrid-enabled Vector Search in Postgres. Revolutionize Vector Search, not Database.",
+                "language": "Rust",
+                "date": "2025-02-26T14:11:43Z",
+                "metrics": {
+                  "stars": 2191,
+                  "forks": 87
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G07_multiturn_send_after_yes",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "send_after_explicit_yes",
+        "difficulty": "hard",
+        "what_it_tests": "Nhánh ngược của R12: sau khi đã hỏi và user nói 'Có' → gọi send với đúng text đã xác nhận và confirmed=true (không hỏi lại vô hạn)."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng lên Telegram câu này giúp mình: \"Bản tin AI hôm nay đã sẵn sàng\""
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn xác nhận đăng nội dung sau lên Telegram không?\n\nBản tin AI hôm nay đã sẵn sàng"
+        },
+        {
+          "role": "user",
+          "content": "Có, đăng đi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "Bản tin AI hôm nay đã sẵn sàng",
+              "confirmed": true
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "send",
+            "args": {
+              "text": "Bản tin AI hôm nay đã sẵn sàng",
+              "confirmed": true
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "send",
+          "args": {
+            "text": "Bản tin AI hôm nay đã sẵn sàng",
+            "confirmed": true
+          },
+          "result": {
+            "tool": "send_telegram",
+            "error": "RuntimeError",
+            "message": "Missing TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID env var"
+          }
+        }
+      ]
+    },
+    {
+      "id": "G08_multiturn_twitter_to_hn",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_switch_to_new_tool",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: bỏ social_search, chuyển sang hackernews, giữ chủ đề Claude, 'mới nhất' → sort=latest; không gọi thừa social_search."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Mọi người nói gì về Claude trên Twitter?"
+        },
+        {
+          "role": "user",
+          "content": "Thôi bỏ Twitter, xem trên Hacker News đi"
+        },
+        {
+          "role": "user",
+          "content": "Lấy các bài mới nhất"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Claude",
+              "sort": "latest"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "hackernews",
+            "args": {
+              "query": "Claude",
+              "sort": "latest",
+              "limit": 5
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_tool",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "hackernews",
+          "args": {
+            "query": "Claude",
+            "sort": "latest",
+            "limit": 5
+          },
+          "result": {
+            "tool": "hn_search",
+            "query": "Claude",
+            "sort": "latest",
+            "timeframe": "all",
+            "items": [
+              {
+                "title": "Notes on Fable 5.2",
+                "url": "https://llmleaderboard.com/guides/claude-fable-5-2",
+                "discussion_url": "https://news.ycombinator.com/item?id=50435663",
+                "source": "llmleaderboard.com",
+                "summary": "Notes on Fable 5.2",
+                "date": "2026-11-10T03:20:16Z",
+                "metrics": {
+                  "points": 1,
+                  "comments": 0
+                },
+                "author": "anitakirkovska"
+              },
+              {
+                "title": "Which Claude model should you build with? Fable, Opus, Sonnet, or Haiku",
+                "url": "https://claude.dev/blog/which-claude-model-should-you-build-with/",
+                "discussion_url": "https://news.ycombinator.com/item?id=50435447",
+                "source": "claude.dev",
+                "summary": "Which Claude model should you build with? Fable, Opus, Sonnet, or Haiku",
+                "date": "2026-11-10T02:45:00Z",
+                "metrics": {
+                  "points": 2,
+                  "comments": 0
+                },
+                "author": "882542F3884314B"
+              },
+              {
+                "title": "I asked Claude to interview itself",
+                "url": "https://www.youtube.com/watch?v=_wYr3FexNIM",
+                "discussion_url": "https://news.ycombinator.com/item?id=50434914",
+                "source": "youtube.com",
+                "summary": "I asked Claude to interview itself",
+                "date": "2026-11-10T01:28:08Z",
+                "metrics": {
+                  "points": 2,
+                  "comments": 0
+                },
+                "author": "morgyn-io"
+              },
+              {
+                "title": "Anthropic must face lawsuit over Claude subscription marketing",
+                "url": "https://www.reuters.com/legal/government/anthropic-must-face-lawsuit-over-claude-subscription-marketing-2026-11-09/",
+                "discussion_url": "https://news.ycombinator.com/item?id=50434100",
+                "source": "reuters.com",
+                "summary": "Anthropic must face lawsuit over Claude subscription marketing",
+                "date": "2026-11-09T23:51:41Z",
+                "metrics": {
+                  "points": 3,
+                  "comments": 0
+                },
+                "author": "mfiguiere"
+              },
+              {
+                "title": "A year after the 100% AI mandate nobody understands our code",
+                "url": "https://www.reddit.com/r/ClaudeCode/comments/1xq2n3t/a_year_after_the_100_ai_mandate_nobody/",
+                "discussion_url": "https://news.ycombinator.com/item?id=50433079",
+                "source": "reddit.com",
+                "summary": "<a href=\"https:&#x2F;&#x2F;redlib.catsarch.com&#x2F;r&#x2F;ClaudeCode&#x2F;comments&#x2F;1xq2n3t&#x2F;a_year_after_the_100_ai_mandate_nobody&#x2F;\" rel=\"nofollow\">https:&#x2F;&#x2F;redlib.catsarch.com&#x2F;r&#x2F;ClaudeCode&#x2F;comments&#x2F;1xq2n3t&#x2F;a_...</a>",
+                "date": "2026-11-09T22:19:12Z",
+                "metrics": {
+                  "points": 116,
+                  "comments": 140
+                },
+                "author": "thelifeline"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G09_multiturn_wiki_correction",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "multiturn_correction_new_tool",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: sửa người (Yann LeCun → Geoffrey Hinton), lang=en; không gọi thêm cho Yann LeCun."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Tra Wikipedia về Yann LeCun giúp mình"
+        },
+        {
+          "role": "user",
+          "content": "À nhầm, Geoffrey Hinton cơ"
+        },
+        {
+          "role": "user",
+          "content": "Lấy bản tiếng Anh nhé"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "query": "Geoffrey Hinton",
+              "lang": "en"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": true,
+        "routing_correct": true,
+        "args_correct": true,
+        "actual_tool_calls": [
+          {
+            "name": "wikipedia",
+            "args": {
+              "query": "Geoffrey Hinton",
+              "lang": "en"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_arg_value",
+        "observed_mismatch": null,
+        "failure_type": null,
+        "failures": []
+      },
+      "tool_results": [
+        {
+          "tool": "wikipedia",
+          "args": {
+            "query": "Geoffrey Hinton",
+            "lang": "en"
+          },
+          "result": {
+            "tool": "wiki_search",
+            "query": "Geoffrey Hinton",
+            "lang": "en",
+            "items": [
+              {
+                "title": "Geoffrey Hinton",
+                "url": "https://en.wikipedia.org/wiki/Geoffrey_Hinton",
+                "source": "en.wikipedia.org",
+                "description": "British-Canadian computer scientist (born 1947)",
+                "summary": "Geoffrey Everest Hinton is a British-Canadian computer scientist, cognitive scientist, cognitive psychologist and Nobel Prize laureate known for his work on artificial neural networks, which earned him the title \"the Godfather of AI\". He is University Professor Emeritus at the University of Toronto."
+              },
+              {
+                "title": "Artificial intelligence",
+                "url": "https://en.wikipedia.org/wiki/Artificial_intelligence",
+                "source": "en.wikipedia.org",
+                "description": "Intelligence in machines",
+                "summary": "Intelligence in machines — Bibcode:2012ISPM...29...82H. doi:10.1109/msp.2012.2205597. Geoffrey Hinton. AI: What Could Go Wrong? with Geoffrey Hinton. Interviewed by Jon Stewart. The Weekly Show"
+              },
+              {
+                "title": "Ilya Sutskever",
+                "url": "https://en.wikipedia.org/wiki/Ilya_Sutskever",
+                "source": "en.wikipedia.org",
+                "description": "Computer scientist (born 1986)",
+                "summary": "Computer scientist (born 1986) — contributions to CLIP, DALL-E, and AlphaGo. With Alex Krizhevsky and Geoffrey Hinton, he co-created AlexNet, a convolutional neural network. One of the"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "G10_multiturn_cancel_send",
+      "phase": "B",
+      "suite": "group",
+      "case_suite": "group",
+      "is_multiturn": true,
+      "metadata": {
+        "skill": "cancel_send_then_search",
+        "difficulty": "hard",
+        "what_it_tests": "3 turns: user huỷ hành động ghi → KHÔNG gọi send (gọi thừa = fail), chuyển sang lookup news + timeframe=week."
+      },
+      "input": [
+        {
+          "role": "user",
+          "content": "Đăng bản tin AI lên Telegram giúp mình"
+        },
+        {
+          "role": "assistant",
+          "content": "Bạn xác nhận đăng bản tin lên Telegram không?"
+        },
+        {
+          "role": "user",
+          "content": "Khoan, đừng đăng. Chỉ tìm cho mình tin công nghệ tuần này trên web thôi"
+        }
+      ],
+      "expect": {
+        "tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "topic": "news",
+              "timeframe": "week"
+            }
+          }
+        ]
+      },
+      "result": {
+        "passed": false,
+        "routing_correct": false,
+        "args_correct": false,
+        "actual_tool_calls": [
+          {
+            "name": "lookup",
+            "args": {
+              "query": "công nghệ",
+              "topic": "news",
+              "timeframe": "week"
+            }
+          },
+          {
+            "name": "clarify",
+            "args": {
+              "question": "Bạn có muốn tìm kiếm tin tức công nghệ tuần này không?",
+              "response_type": "yes_no"
+            }
+          }
+        ],
+        "actual_text": null,
+        "case_failure_type": "wrong_boundary",
+        "observed_mismatch": "extra_tool_call",
+        "failure_type": "wrong_boundary",
+        "failures": [
+          "extra tool call clarify"
+        ]
+      },
+      "tool_results": [
+        {
+          "tool": "lookup",
+          "args": {
+            "query": "công nghệ",
+            "topic": "news",
+            "timeframe": "week"
+          },
+          "result": {
+            "tool": "web_search",
+            "query": "công nghệ",
+            "topic": "news",
+            "timeframe": "week",
+            "items": [
+              {
+                "title": "Công nghệ gen tạo động lực đột phá cho ngành nông nghiệp",
+                "url": "https://baochinhphu.vn/cong-nghe-chinh-sua-gen-tao-dong-luc-dot-pha-cho-nganh-nong-nghiep-102261109083920082.htm",
+                "source": "baochinhphu.vn",
+                "summary": "Giai đoạn 2026-2030, Việt Nam đặt mục tiêu xy dựng ít nhất 5 phòng thí nghiệm trọng điểm và 5 phòng thí nghiệm chuyên ngành hiện đại, tập trung vào công nghệ gen, công nghệ tế bào thực vật và động vật, vi sinh vật, thú y và chẩn đoán dịch bệnh. Mục tiêu đến năm 2035, tầm nhìn đến năm 2045 là làm chủ hoàn toàn công nghệ sinh học thế hệ mới và công nghệ chỉnh sửa gen để tạo ra các sản phẩm thương mại phục vụ thị trường trong nước và xuất khẩu. [...] Được xếp vào danh mục công nghệ chiến lược cấp quốc gia, công nghệ chỉnh sửa gen, đặc biệt là CRISPR/Cas, đang mở ra vận hội lớn để nông nghiệp Việt Nam chủ động thích ứng với biến đổi khí hậu và bảo đảm an ninh lương thực.\n\nCác chuyên gia quốc tế khẳng định, kỹ thuật chỉnh sửa gen, tiêu biểu là CRISPR/Cas, mang lại bước tiến mang tính cách mạng nhờ khả năng can thiệp chính xác, có chủ đích vào hệ gen mục tiêu mà không đưa vật liệu di truyền ngoại lai vào cơ thể sinh vật. [...] Trong định hướng phát triển khoa học, công nghệ và đổi mới sáng tạo phục vụ tái cơ cấu ngành nông nghiệp, công nghệ sinh học thế hệ mới ngày càng khẳng định vị trí động lực then chốt. Theo Quyết định số 1131/QĐ-TTg của Thủ tướng Chính phủ về Danh mục công nghệ chiến lược và sản phẩm công nghệ chiến lược, công nghệ chỉnh sửa gen thuộc nhóm công nghệ y - sinh học tiên tiến, được định hướng ưu tiên ứng dụng mạnh mẽ trong y tế và nông nghiệp. Định hướng này tiếp tục được cụ thể hóa tại Quyết định",
+                "score": 0.31507227
+              },
+              {
+                "title": "Công đoàn Khoa học và Công nghệ Việt Nam phát động 3 cuộc thi thúc đẩy sáng tạo và ứng dụng AI",
+                "url": "https://tapchikinhtetaichinh.vn/cong-doan-khoa-hoc-va-cong-nghe-viet-nam-phat-dong-3-cuoc-thi-thuc-day-sang-tao-va-ung-dung-ai-171989.html",
+                "source": "tapchikinhtetaichinh.vn",
+                "summary": "Điểm nhấn đáng chú ý trong chuỗi hoạt động là cuộc thi “Ứng dụng trí tuệ AI trong công việc”, hướng tới thúc đẩy việc đưa công nghệ mới vào thực tiễn lao động, sản xuất và quản lý. Cuộc thi khuyến khích đoàn viên, người lao động chủ động tìm hiểu, khai thác AI để giải quyết những khó khăn, vướng mắc phát sinh trong quá trình thực hiện nhiệm vụ. [...] Thông qua 3 cuộc thi, Công đoàn Khoa học và Công nghệ Việt Nam kỳ vọng tạo động lực thúc đẩy phong trào thi đua sáng tạo, nng cao kỹ năng số và khả năng ứng dụng công nghệ của đoàn viên, người lao động. Đy cũng là dịp lan tỏa hình ảnh người lao động ngành khoa học và công nghệ năng động, sáng tạo, tích cực đóng góp vào quá trình chuyển đổi số và phát triển đất nước.\n\nTags: [...] Phó Thủ tướng Nguyễn Văn Thắng yêu cầu tập trung kiểm soát lạm phát những tháng cuối năm, giữ ổn định giá hàng hóa, dịch vụ do Nhà nước quản lý.\n\nTổng Bí thư, Chủ tịch nước Tô Lm dự Diễn đàn Công tư về hợp tác kinh tế và khoa học - công nghệ Việt Nam - Nhật Bản \n\n### Tổng Bí thư, Chủ tịch nước Tô Lm dự Diễn đàn Công tư về hợp tác kinh tế và khoa học - công nghệ Việt Nam - Nhật Bản",
+                "score": 0.45759112
+              },
+              {
+                "title": "Phát huy nguồn lực trí thức Việt Nam tại Nhật Bản để giải quyết các bài toán công nghệ thực tiễn - Cổng Thông tin điện tử Bộ Khoa học và Công nghệ",
+                "url": "https://mst.gov.vn/phat-huy-nguon-luc-tri-thuc-viet-nam-tai-nhat-ban-de-giai-quyet-cac-bai-toan-cong-nghe-thuc-tien-197261109120235782.htm",
+                "source": "mst.gov.vn",
+                "summary": "doanh nghiệp trong nước để đề xuất, triển khai các nhiệm vụ khoa học và công nghệ, tập trung giải quyết những bài toán thực tiễn, tạo ra sản phẩm và giá trị cụ thể cho nền kinh tế. [...] Quay lại\n\nMột số từ viết tắt trên cổng TTĐT Bộ   In\n\nChia sẻ facebook Chia sẻ twitter Chia sẻ zalo Gửi mail Sao chép đường dẫn\n\n\n\nPhản ánh, kiến nghị văn bản   \nquy phạm pháp luật\n\nNghiên cứu cơ bản và ứng dụng công nghệ cao.\n\n Xem thêm\n\n\n\nDịch vụ hành chính công\n\nThông tin về Dịch vụ hành chính công Bộ Khoa học và Công nghệ; Hệ thống thông tin giải quyết TTHC\n\n Xem thêm\n\n\n\nSản phẩm dịch vụ,   \nKHCN, ĐMST\n\nThông tin giới thiệu về các sản phẩm, dịch vụ ngành Khoa học và Công nghệ\n\n Xem thêm",
+                "score": 0.2512897
+              },
+              {
+                "title": "Cổ phiếu công nghệ Mỹ bị bán tháo, thổi bay mức kỷ lục 2.300 tỷ USD vốn hóa | Báo Dân trí",
+                "url": "https://dantri.com.vn/kinh-doanh/co-phieu-cong-nghe-my-bi-ban-thao-thoi-bay-muc-ky-luc-2300-ty-usd-von-hoa-20261106080014669.htm",
+                "source": "dantri.com.vn",
+                "summary": "Chỉ số Nasdaq 100 giảm 6,4%, thổi bay 2.300 tỷ USD giá trị vốn hóa, mức lớn nhất từng ghi nhận. Lĩnh vực công nghệ dẫn đầu đợt bán tháo lan rộng khắp các nhóm ngành, kéo chỉ số S&P 500 giảm 4,4%. Đy là mức giảm mạnh nhất kể từ tháng 4/2025, khi thị trường chao đảo vì đợt thuế quan đối ứng của Tổng thống Mỹ Donald Trump. Chỉ số đo lường cổ phiếu bán dẫn Mỹ lao dốc 12%, ghi nhận ngày tồi tệ nhất kể từ khi đại dịch Covid-19 bùng phát vào tháng 3/2020. [...] Kinh doanh\n\n# Cổ phiếu công nghệ Mỹ bị bán tháo, thổi bay mức kỷ lục 2.300 tỷ USD vốn hóa\n\nXun Hoa\n\nXun Hoa\n\n## (Dn trí) - Cổ phiếu công nghệ lao dốc mạnh nhất kể từ năm 2020 trong phiên 5/11 khi nhà đầu tư rút lo ngại về làn sóng đầu tư vào AI sau khi Đảng Dn chủ thắng áp đảo trong cuộc bầu cử giữa nhiệm kỳ ở Mỹ. [...] “Trong chuỗi cung ứng AI đã có rất nhiều yếu tố định giá và biên lợi nhuận dựa trên sự khan hiếm, dù là ở các công ty bộ nhớ hay các công ty công nghiệp phục vụ trung tm dữ liệu”, ông Justin Bergner, nhà quản lý danh mục tại Gabelli Funds, nhận định. Ông nói thêm rằng thị trường đang phản ánh vào giá một quá trình xy dựng hạ tầng kéo dài hơn, điều sẽ khiến chuỗi cung ứng bớt căng thẳng và biên lợi nhuận thấp hơn.",
+                "score": 0.24421923
+              },
+              {
+                "title": "Sở Khoa học và Công nghệ Hà Tĩnh hướng dẫn xét công nhận sáng kiến và đánh giá hiệu quả đề tài khoa học",
+                "url": "https://hatinh.gov.vn/vi/bai-viet/so-khoa-hoc-va-cong-nghe-ha-tinh-huong-dan-xet-cong-nhan-sang-kien-va-danh-gia-hieu-qua-de-tai-khoa-hoc",
+                "source": "hatinh.gov.vn",
+                "summary": "Theo hướng dẫn, các giải pháp được xem xét công nhận là sáng kiến bao gồm: giải pháp kỹ thuật, giải pháp quản lý, giải pháp tác nghiệp và giải pháp ứng dụng tiến bộ kỹ thuật. Trong đó, giải pháp kỹ thuật có thể là sản phẩm, vật liệu, giống cy trồng, vật nuôi hoặc quy trình công nghệ; giải pháp quản lý là phương pháp tổ chức, điều hành công việc; giải pháp tác nghiệp là các phương pháp thực hiện nghiệp vụ chuyên môn; còn giải pháp ứng dụng tiến bộ kỹ thuật là việc áp dụng các giải pháp kỹ thuật [...] Đối với các đề tài khoa học, đề án khoa học và công trình khoa học – công nghệ, việc xét nghiệm thu thực hiện theo quy định của pháp luật về khoa học và công nghệ. Các đề tài chỉ được xem xét công nhận hiệu quả áp dụng và phạm vi ảnh hưởng khi đã được nghiệm thu đạt yêu cầu trở lên.",
+                "score": 0.25643653
+              }
+            ]
+          }
+        },
+        {
+          "tool": "clarify",
+          "args": {
+            "question": "Bạn có muốn tìm kiếm tin tức công nghệ tuần này không?",
+            "response_type": "yes_no"
+          },
+          "result": {
+            "tool": "ask_user",
+            "question": "Bạn có muốn tìm kiếm tin tức công nghệ tuần này không?",
+            "response_type": "yes_no",
+            "options": [
+              "yes",
+              "no"
+            ],
+            "awaiting_user": true
+          }
+        }
+      ]
+    }
+  ]
+}
